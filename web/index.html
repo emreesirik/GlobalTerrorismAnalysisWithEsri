@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="external/bootstrap-3.3.2/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="http://js.arcgis.com/3.13/esri/css/esri.css">
+    <script src="http://js.arcgis.com/3.13/"></script>
+
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
+    <link href="external/perfect-scrollbar/perfect-scrollbar.min.css" type="text/css" rel="stylesheet" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link href="external/tooltipster/tooltipster.css" type="text/css" rel="stylesheet" />
+
+</head>
+<body ng-app="MapApp">
+<div ng-view id="esriApp">
+</div>
+</body>
+<script type="text/javascript"
+        src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script>
+    define.amd.jQuery = true;
+</script>
+
+<script src="external/jquery-1.11.2/jquery-1.11.2.min.js"></script>
+
+<script src="external/angular-1.3.10/angular.min.js"></script>
+<script src="external/angular-1.3.10/angular-route.min.js"></script>
+<script src="external/bootstrap-3.3.2/js/bootstrap.min.js"></script>
+
+<!--CUSTOM SCROLL-->
+<script src="external/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+<!--TOOLTIP-->
+<script src="external/tooltipster/jquery.tooltipster.min.js"></script>
+<!---->
+
+<!--RETINA JS-->
+<script src="external/retinajs/angular-retina.min.js"></script>
+
+<script src="js/app/app.js"></script>
+<script src="js/app/factory/MapService.js"></script>
+
+<!--DIRECTIVES-->
+<script src="js/app/directive/BarChartDirective.js"></script>
+<script src="js/app/directive/LineChartDirective.js"></script>
+<script src="js/app/directive/PerfectScrollbarDirective.js"></script>
+<script src="js/app/directive/TooltipDirective.js"></script>
+
+<!--CONTROLLERS-->
+<script src="js/app/controller/MapController.js"></script>
+<script src="js/app/map/MapManager.js"></script>
+<script src="js/app/map/AnimatedGeometry.js"></script>
+<script src="js/app/util/MapUtil.js"></script>
+
+
+
+</html>

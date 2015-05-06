@@ -1,0 +1,1044 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800);
+@import url(http://fonts.googleapis.com/css?family=Montserrat:300,400,600,700,800);
+
+html, body, #mapDiv,.claro,#esriApp {
+    padding: 0;
+    margin: 0;
+    height: 100% !important;
+    font-family: "Open Sans";
+    overflow: hidden;
+}
+#year {
+    position: absolute;
+    left: 20px;
+    top: 100px;
+    color: white;
+    font-size: 40px;
+    z-index: 10;
+
+}
+#timeline {
+    position: absolute;
+    left: 50px;
+    bottom: 30px;
+    height: 35px;
+    line-height: 35px;
+    -moz-transition:    bottom 800ms ease;
+    -webkit-transition: bottom 800ms ease;
+    -o-transition:      bottom 800ms ease;
+    -ms-transition:     bottom 800ms ease;
+    transition:         bottom 800ms ease;
+}
+
+.timeline_invisible {
+    bottom: -35px !important;
+}
+
+#timeline .item {
+    background: #2A3138;
+    height: 40px;
+    min-width: 40px;
+    display: inline-block;
+    color: white;
+    /* padding-top: 5px; */
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: 40px;
+}
+
+#timeline .item.year {
+    /* font-size: 20px; */
+    line-height: 40px;
+    padding-top: 0px;
+    min-width: 100px;
+    text-align: center;
+}
+.play-button:hover {
+    cursor: pointer;
+}
+
+.incident-menu.dropdown-menu, .season-menu.dropdown-menu,.year-menu.dropdown-menu {
+    background: #2A3138;
+    top: -203px;
+    left: -20px;
+    border-radius: 2px;
+    /* height: 214px; */
+}
+
+.season-menu.dropdown-menu {
+    top: -177px;
+
+}
+
+.incident-menu.dropdown-menu:before, .season-menu.dropdown-menu:before {
+    content: 'FILTER INCIDENT TYPE';
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: url("../img/filter.png") 15px no-repeat #2D8CFF;
+    top: -6px;
+    position: relative;
+}
+.season-menu.dropdown-menu:before {
+    content: 'SELECT SEASON';
+    background: url("../img/filter.png") 8px no-repeat #2D8CFF;
+}
+.year-menu {
+    color:#ffffff;
+    font-size: 12px;
+    width: 166px;
+    top: -293px !important;
+    left: 0px !important;
+    padding-top: 0px;
+}
+.incident-menu.dropdown-menu>li>a, .season-menu.dropdown-menu>li>a {
+    color: #ffffff;
+}
+.incident-menu.dropdown-menu>li>a:focus, .incident-menu.dropdown-menu>li>a:hover, .season-menu.dropdown-menu>li>a:hover, .season-menu.dropdown-menu>li>a:focus {
+    background: #2D8CFF;
+}
+#incident-menu-button:hover, #season-menu-button:hover {
+    cursor: pointer;
+}
+
+.session-item.WINTER {
+    background: #6bc2ea !important;
+}
+.session-item.SUMMER{
+    background: #E5C92B !important;
+}
+.session-item.AUTUMN{
+    background: #B0703C !important;
+}
+.session-item.SPRING {
+    background: #3cb04c !important;
+}
+
+.incident-menu.dropdown-menu>li>a:hover, .season-menu.dropdown-menu>li>a:hover {
+    cursor:pointer;
+}
+
+div#heatmap-configuration {
+    z-index: 2;
+    position: absolute;
+    top: 100px;
+    display: none;
+}
+
+
+.dropdown .dropdown-menu{
+    opacity: 0;
+    display:block;
+    visibility: hidden;
+    -moz-transition:    all 400ms ease;
+    -webkit-transition: all 400ms ease;
+    -o-transition:      all 400ms ease;
+    -ms-transition:     all 400ms ease;
+    transition:         all 400ms linear;
+}
+.dropdown.open .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.year-list {
+    padding-left: 15px;
+    color:#969798;
+    padding-top: 0px;
+    padding-bottom: 17px;
+    /* height: 99px; */
+}
+.year-list div {
+    height: 20px;
+}
+
+.year-list div span {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.year-list div span:hover,.year-list div span.active {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.year-2000 {
+    background: #3A434D;
+}
+
+
+.year-90 {
+    background: #323A42;
+}
+
+
+.year-80 {
+    background: #2A3138;
+}
+
+.year-menu .title {
+    background: #2D8CFF;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.item.incident:hover{
+    background: #353e46 !important;
+}
+
+.session-item #season-menu-button img {
+    width: 30px;
+    -webkit-filter: invert(100%);
+    -moz-filter: invert(100%);
+    -ie-filter: invert(100%);
+    -o-filter: invert(100%);
+}
+
+#calendar-button{
+    position: relative;
+
+    top: -2px;
+    left: 18px;
+}
+
+#calendar-button:hover,.year.open #calendar-button{
+    -webkit-filter: saturate(350%);
+    -moz-filter: saturate(350%);
+    -ie-filter: saturate(350%);
+    -o-filter: saturate(350%);
+
+    cursor: pointer;
+}
+
+#yearProgress {
+    height: 3px;
+
+    position: absolute;
+    /*width: 100%;*/
+    left: 0px;
+    display: block;
+    background: #4495fa;
+}
+
+.width-transition {
+    transition: width 1s linear;
+    -webkit-transition: width 1s linear;
+    -moz-transition: width 1s linear;
+    -ie-transition: width 1s linear;
+    -o-transition: width 1s linear;
+}
+
+div#search {
+    /* position: absolute; */
+    /* z-index: 10; */
+    /* top: 42px; */
+    /* left: 100px; */
+    /* width: 100px; */
+    display: block;
+    height: 40px;
+}
+
+.search-box {
+    background: #2A3138;
+    /* height: 46px; */
+    position: absolute;    z-index: 10;
+    top: 35px;
+    left: 89px;
+    padding: 10px 10px 5px 10px;
+    /* width: 100px; */
+}
+
+.arcgisSearch .searchBtn {
+    display: none;
+}
+
+.arcgisSearch .searchGroup .searchInput {
+    width: 30px;
+    border-radius: 0px;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    -ie-transition: all .5s;
+    transition: all .5s;
+    /* background: #ededed url(http://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 6px center; */
+    background: #ededed  center;
+    /* text-align: right; */
+    font-size: 14px;
+}
+
+.active .arcgisSearch .searchGroup .searchInput {
+    width: 150px;
+}
+
+/*.arcgisSearch .searchGroup .searchInput:focus {
+    width: auto;
+    padding: 6px 20px 6px 30px;
+    font-size: 14px;
+}*/
+.suggestionsMenu:focus {
+    width: auto !important;
+}
+
+.arcgisSearch .searchGroup .searchInput:focus::-webkit-input-placeholder {
+    font-size: 14px;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    font-size: 0px;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    font-size: 0px;
+    opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-size: 0px;
+    opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    font-size: 0px;
+}
+
+.arcgisSearch .hasValue .searchClear {
+    display: none;
+}
+
+.arcgisSearch .showSuggestions .suggestionsMenu {
+    display: block;
+    width: 221px !important;
+}
+.btns{
+    position: absolute;
+    left: 20px;
+    top: 150px;
+    z-index: 2;
+}
+
+.btns button{
+    display: block;
+}
+
+
+div#analysis {
+    position: fixed;
+    width: 400px;
+    height: 100%;
+    background: #FFFFFF;
+    right: 0px;
+    top: 0px;
+    -moz-transition:    right 800ms ease;
+    -webkit-transition: right 800ms ease;
+    -o-transition:      right 800ms ease;
+    -ms-transition:     right 800ms ease;
+    transition:         right 800ms ease;
+}
+
+.analysis_invisible {
+    right: -400px !important;
+}
+
+#analysis .title {
+    height: 35px;
+    background: #2D8CFF;
+    color: #ffffff;
+    line-height: 35px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#analysis .tabs .tab {
+    background: #F4F4F4;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    color: #AAAAA8;
+}
+
+#analysis .tabs .tab.active {
+    background: #ffffff;
+    color: #4F4F4F;
+    border-top: 4px #091316 solid;
+    line-height: 31px;
+}
+
+
+#analysis .tabs .tab:hover {
+    cursor: pointer;
+}
+
+#analysis .tabs.row,#analysis .attact-type.row,.analysis-result-tab .row{
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.analysis-result-tab .row {
+    padding-left: 15px;
+}
+.btn-attack{
+    background: #2A3138;
+
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#explosion .info {
+    color: #2A3138;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.line-padding {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+#explosion .detail {
+    color: #AAAAA8;
+    font-size: 9px;
+    font-weight: lighter;
+    position: absolute;
+    right: 15px;
+    padding-top: 6px;
+}
+
+.btn-attack-type,.btn-attack-type:focus,.btn-attack-type:active:focus,.btn-attack-type:active{
+    background: #FFFFFF;
+    border: 1px solid;
+    border-color: #EBECE1 !important;
+    color: #b8b8b8;
+    border-radius: 2px;
+    width: 100%;
+    margin-top: 15px;
+    outline: none;
+    height: 42px;
+}
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+
+.btn-attack-type:hover,.btn-attack-type.active {
+    background: #101B26;
+    color: white;
+    position: relative;
+}
+
+.btn-attack-type.active:before {
+    content: '✓';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    display: block;
+    /* background: red; */
+    border: 1px solid #99E8B7;
+    font-size: 9px;
+    padding: 1px 2px;
+    border-radius: 11px;
+    width: 16px;
+    color: #99E8B7;
+}
+
+.attact-type div{
+    padding: 0px;
+}
+
+.attact-type div:nth-child(1){
+    padding-right: 8px;
+}
+
+.attact-type div:nth-child(2){
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.attact-type div:nth-child(3){
+    padding-left: 8px;
+}
+
+.custom-explosion {
+    margin-top: 2px;
+    position: relative;
+}
+
+.custom-explosion input {
+    border-radius: 2px;
+    border-color: #E7E7E7;
+    text-align: center;
+}
+
+.custom-placeholder {
+    position: absolute;
+
+    top: 3px;
+    font-size: 12px;
+    left: 141px;
+    color: #e0e0e0;
+    font-weight: bolder;
+}
+
+.custom-info {
+    position: absolute;
+
+    top: 15px;
+    font-size: 10px;
+    left: 168px;
+    color: #e0e0e0;
+}
+
+.custom-button {
+    position: absolute;
+    right: 22px;
+    top: 5px;
+    font-size: 17px;
+    color: #e0e0e0;
+}
+
+.custom-button:hover {
+    cursor: pointer;
+}
+
+.group-percent {
+    color: #2D8CFF;
+    font-weight: bold;
+}
+
+.group-prediction{
+    padding-top: 15px;
+}
+
+.prediction-list{
+    padding-top: 10px;
+    position: relative;
+}
+
+.analysis-result-tab .label {
+    color: #2D8CFF;
+    font-weight: 700;
+    font-size: 12px;
+    display: block;
+    text-align: left;
+}
+
+.analysis-result-tab .label:hover {
+    cursor: pointer;
+}
+
+.value-list {
+    opacity: 0;
+    padding-bottom: 8px;
+    transition: all 0.5s linear;
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    -ie-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+
+    visibility: hidden;
+}
+
+.value-list .row {
+
+}
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.analysisRadius {
+    position: absolute;
+
+    top: 3px;
+    left: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.padding-left-35 {
+    padding-left: 30px;
+}
+
+#new-attack {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+}
+
+#new-attack.disable img {
+    -webkit-filter: grayscale(100%); filter: grayscale(100%);
+
+}
+
+.layer-icon {
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: relative;
+    background: none;
+    border-radius: 9px;
+    top: 2px;
+
+}
+
+
+.layer-icon :hover,.limit-number:hover {
+    cursor: pointer;
+}
+
+.layer-name {
+    font-size: 13px;
+    /* font-weight: bold; */
+}
+
+.poi-layers {
+    padding-top: 10px;
+}
+.poi-layer-list {
+    padding-top: 4px;
+}
+
+.limit-number {
+    font-size: 11px;
+    color: #e0e0e0;
+}
+
+.limit-number.active {
+    color: #2D8CFF;
+}
+
+
+.barchart {
+    width: 100%;
+
+    background: #F4F4F4;
+    display: block;
+    height: 100%;
+}
+.barchart-line {
+    background: #2D8CFF;
+
+    display: block;
+    width: 0%;
+    height: 100%;
+    transition: width 1s linear;
+    -webkit-transition: width 1s linear;
+    -moz-transition: width 1s linear;
+    -ie-transition: width 1s linear;
+    -o-transition: width 1s linear;
+
+}
+
+.barchart-info {
+    /* width: 100%; */
+    height: 10px;
+    display: block;
+    /* background: red; */
+    position: relative;
+    top: 6px;
+}
+.result-number{
+    font-weight: bold;
+    text-align: right;
+}
+
+.event-key-circle {
+    width: 10px;
+    height: 10px;
+
+    min-width: 10px;
+    min-height: 10px;
+    display: inline-table;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+.event-key-circle[event="Bombing/Explosion"] {
+    background: #ED2028;
+}
+.event-key-circle[event="Assassination"] {
+    background: #04EAFF;
+}
+
+.event-key-circle[event="Armed Assault"] {
+    background: #e67e22;
+}
+
+.event-key-circle[event= "Facility/Infrastructure Attack"] {
+    background: #ED1AF0;
+}
+
+.event-key-circle[event^="Hostage Taking"] {
+    background: #4BED1E;
+}
+
+.event-key-circle[event="Hijacking"] {
+    background:#19B5FE ;
+}
+
+
+.event-key-circle[event="Unarmed Assault"] {
+    background:#E74C3C ;
+}
+
+
+.event-key-circle[event="Unknown"] {
+    background:#ECF0F1 ;
+}
+
+/*
+.line-chart-div {
+    height: 199px;
+    display: block;
+    position: relative;
+}
+
+
+.line-chart-div div:first-child{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}*/
+.event-statistic {
+    position: absolute;
+    top: 24px;
+}
+
+.people-status {
+    position: absolute;
+    top: 183px;
+}
+
+.main-title img {
+    margin-right: 7px;
+    position: relative;
+    top: -1px;
+}
+
+
+/*ESRI ZOOM IN OUT BUTTONS*/
+.esriSimpleSliderTL {
+    top: 20px;
+    right: 20px;
+    left: initial;
+    transition: right 800ms ease;
+    -webkit-transition: right 800ms ease;
+    -moz-transition: right 800ms ease;
+    -ie-transition: right 800ms ease;
+    -o-transition: right 800ms ease;
+
+
+}
+
+.analysis-opened .esriSimpleSliderTL {
+    right: 420px;
+}
+
+.esriSimpleSliderDecrementButton {
+    /* margin-top: 5px; */
+    position: relative;
+}
+
+div#mapDiv_zoom_slider {
+    /* margin: 5px 0px; */
+    background: none;
+    border: none;
+}
+
+.esriSimpleSliderIncrementButton {
+    background: #2A3138;
+    border-bottom: none !important;
+    color: white;
+    border-radius: 5px !important;
+}
+
+.esriSimpleSliderDecrementButton {
+    background: #2A3138;
+    position: relative;
+    top: 5px;
+    color: white;
+    border-radius: 5px !important;
+}
+
+.esriSimpleSliderDecrementButton:hover, .esriSimpleSliderIncrementButton:hover {
+    background-color: #5a5a5a;
+}
+
+.toolbar{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    color: #ffffff;
+    background: #2A3138;
+    transition: height 0.7s linear;
+    height: 0px;
+    display: block;
+    width: 65px;
+}
+
+.toolbar.toolbar-open{
+    height: 363px;
+}
+
+.toolbar-switcher {
+    background: #0F1214;
+    height: 13px;
+    display: block;
+}
+
+.toolbar-switcher:hover,.toolbar-button:hover {
+    cursor: pointer;
+}
+
+.toolbar-button{
+    height: 70px;
+    text-align: center;
+    font-size: 12px;
+    border-top: 1px solid #374049;
+}
+
+
+.toolbar-button:first-child {
+    border: none;
+}
+
+.selected-analysis {
+    border-left: 4px solid #FFA200;
+}
+
+.not-selected-analysis {
+    color: #b8b8b8;
+}
+
+.toolbar-buttons {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.not-show-toolbar{
+    transition: all 0.3s linear;
+    transition-delay: 0s;
+    -webkit-transition: all 0.3s linear;
+    -webkit-transition-delay: 0s;
+    -moz-transition: all 0.3s linear;
+    -moz-transition-delay: 0s;
+    -ie-transition: all 0.3s linear;
+    -ie-transition-delay: 0s;
+    -o-transition: all 0.3s linear;
+    -o-transition-delay: 0s;
+}
+
+.show-toolbar {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0.3s;
+    -webkit-transition: all 0.4s ease-in-out;
+    -webkit-transition-delay: 0.3s;
+    -moz-transition: all 0.4s ease-in-out;
+    -moz-transition-delay: 0.3s;
+    -ie-transition: all 0.4s ease-in-out;
+    -ie-transition-delay: 0.3s;
+    -o-transition: all 0.4s ease-in-out;
+    -o-transition-delay: 0.3s;
+}
+
+.toolbar-button img {
+    display: block;
+    margin: 0 auto;
+    padding-top: 9px;
+    padding-bottom: 5px;
+}
+
+.toolbar-switcher img {
+    position: relative;
+    top: -5px;
+    left: 21px;
+}
+.esriPopupWrapper .titlePane,.esriPopupWrapper .actionsPane {
+    display: none;
+}
+
+/*
+#analysis .tabs .tab.disable:hover {
+    cursor: no-drop;
+}*/
+
+.statistic-count {
+    text-align: right;
+}
+.esriPopup .esriPopupWrapper {
+    box-shadow: none;
+}
+
+.esriPopup .sizer {
+    width: 270px;
+}
+.esriPopup .contentPane {
+    padding: 0px;
+    max-height: 500px;
+    width: 270px;
+    padding-bottom: 10px;
+}
+
+.popupTitle {
+    background: #2D8CFF;
+    width: 100%;
+    color: white;
+    height: 50px;
+    line-height: 50px;
+    /* line-height: 50px; */
+    /* vertical-align: middle; */
+    /* padding-top: 5px; */
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* position: relative; */
+    /* top: 50%; */
+}
+
+.popupTitle span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+.popup-data-title {
+    color: #2D8CFF;
+    width: 65px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.popup-data {
+    padding-left: 8px;
+    padding-right: 8px;
+    overflow-x: hidden;
+}
+
+.attack-popup .popup-data-title {
+    padding-top: 0px;
+    width: 82px;
+    padding-right: 2px;
+    font-size: 12px;
+}
+
+#prediction-wrapper,#analysis-wrapper {
+    position: relative;
+    overflow: hidden;
+    /* height: 400px; */
+}
+
+.open-tree-icon {
+    position: absolute;
+    left: 15px;
+    transition:all 500ms linear;
+    -webkit-transition:all 500ms linear;
+    -moz-transition:all 500ms linear;
+    -o-transition:all 500ms linear;
+    -ie-transition:all 500ms linear;
+}
+
+.open-tree-icon.closed {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ie-transform: rotate(-90deg);
+}
+
+.contentPane img {
+    max-height: 200px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    object-fit: cover;
+    width: 100%;
+}
+
+
+.tooltipster-guru {
+    /* border-radius: 5px; */
+    /* border: 2px solid #000; */
+    background: rgba(50, 50, 50, 0.9);
+    color: #fff;
+}
+/* Use this next selector to style things like font-size and line-height: */
+.tooltipster-guru .tooltipster-content {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 8px 10px;
+}
+
+.tooltipster-guru .tooltipster-arrow-top {
+    display: none;
+}
+
+.btn-attack img {
+    position: relative;
+    top: -2px;
+    left: -5px;
+}
+
+.btn-attack-type img {
+    position: relative;
+    top: -1px;
+    left: -2px;
+}
+
+#mapDiv text {
+    fill: rgb(255, 255, 255);
+    stroke: rgb(70, 77, 72);
+    stroke-opacity: 0.8;
+    font-family: "Open Sans";
+    font-size: 14px;
+}
+
+linechart div:first-child {
+    top: 9px;
+}
+
+.data-info {
+    position: absolute;
+    z-index: 10;
+    right: 27px;
+    top: 92px;
+    -moz-transition:    right 800ms ease;
+    -webkit-transition: right 800ms ease;
+    -o-transition:      right 800ms ease;
+    -ms-transition:     right 800ms ease;
+    transition:         right 800ms ease;
+}
+
+.data-info.analysis-opened {
+    right: 427px;
+}
+
+.prediction-info {
+    text-align: center;
+    padding-top: 40px;
+    margin: 20px;
+    padding-bottom: 40px;
+    border: 1px solid rgb(209, 202, 202);
+    color: rgb(150, 149, 149);
+}

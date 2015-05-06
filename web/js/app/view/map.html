@@ -1,0 +1,339 @@
+<div class="claro">
+    <div class="data-info" ng-class="status!='analysis' ? '' : 'analysis-opened'"><img ng-src="img/info.png" width="18" tooltip="Global Terrorism Database(GTD) that has 121.000 detailed terrorist incidents is used in this project."/>
+    </div>
+    <div class="toolbar noselect" ng-init="isToolbarOpen = true" ng-class="isToolbarOpen ? 'toolbar-open' : ''">
+        <div ng-click="isToolbarOpen=!isToolbarOpen" class="toolbar-switcher"><img ng-src="img/toolbar/toolbar.png" width="26"></div>
+        <div class="toolbar-buttons" ng-class="isToolbarOpen ? 'show-toolbar' : 'not-show-toolbar'">
+            <div class="toolbar-button" ng-click="openSearchBox()" ng-class="!isSearchOpen ? 'not-selected-analysis' : ''">
+                <img ng-src="img/toolbar/search_{{!isSearchOpen ? 'in' : '' }}active.png" width='32' />Search
+            </div>
+            <div class="toolbar-button" ng-class="status=='heatmap' ? 'selected-analysis' : 'not-selected-analysis' " ng-click="startHeatmap()">
+                <img ng-src="img/toolbar/heatmap_{{status!='heatmap' ? 'in' : ''}}active.png" width='32'/>
+                Heatmap
+            </div>
+            <div class="toolbar-button" ng-class="status=='analysis' ? 'selected-analysis' : 'not-selected-analysis' " ng-click="startAnalysis()">
+                <img ng-src="img/toolbar/prediction_{{status!='analysis' ? 'in' : ''}}active.png" width='32'/>
+                Prediction
+            </div>
+            <div class="toolbar-button" ng-click="switchBaseLayer()">
+                <img ng-hide='baseLayer == "osm"' ng-src="img/toolbar/satel_active.png" width='32'/>
+                <img ng-show='baseLayer == "osm"' ng-src="img/toolbar/map_active.png" width='32'/>
+                {{baseLayer == 'osm' ? 'OSM' : 'Satellite'}}
+            </div>
+            <div class="toolbar-button" ng-click="blackAndWhite()" ng-class="!isBlackAndWhite ? 'not-selected-analysis' : ''">
+                <img ng-src="img/toolbar/bw_{{!isBlackAndWhite ? 'in' : ''}}active.png" width='32'/>
+                B&W View
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-show="isSearchOpen" class="search-box" ng-class="isSearchOpen ? 'active' : ''">
+        <div id="search" ></div>
+    </div>
+    <div id="mapDiv" ng-class="status=='analysis' ? 'analysis-opened' : '' "></div>
+    <div id="heatmap-configuration">
+        blur:<input type="text" value="13" id="blur" ng-blur="changeHeatmapConf()"></br>
+        maxpixel:<input type="text" value="100" id="maxpixel" ng-blur="changeHeatmapConf()"></br>
+        minpixel:<input type="text" value="0" id="minpixel" ng-blur="changeHeatmapConf()"></br>
+        colors:<input type="text"
+                      value='rgba(250, 0, 0, 0)+rgba(182, 117, 209, 0.5)+rgba(246, 156, 18, 0.5)+rgba(243, 156, 18, 0.6)+rgba(230, 229, 41, 0.8)+rgba(255, 0, 0, 0.7)'
+                      id="color" ng-blur="changeHeatmapConf()">
+    </div>
+    <!-------------- HEATMAP UI ---------------------->
+    <div id="timeline" class="noselect" ng-class="status!='heatmap' ? 'timeline_invisible' : ''">
+        <div class="item play-button" ng-click="togglePlay()">
+            <img ng-show="!isPlayed" ng-src="img/play.png" width="18">
+            <img ng-show="isPlayed" ng-src="img/pause.png" width="18">
+        </div>
+        <div class="item year dropdown">{{year}}
+                <span id="year-menu-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   <img id="calendar-button" ng-src="img/calendar.png" width="16"/>
+                </span>
+            <ul class="dropdown-menu year-menu" role="menu" aria-labelledby="year-menu-button">
+                <div class="title">SELECT A YEAR</div>
+                <div class="year-list year-2000">
+                    <div>
+                        <span ng-class="year == 2012 ? 'active' : ''" ng-click="goToYear(2012)">2012</span>
+                        <span ng-class="year == 2013 ? 'active' : ''" ng-click="goToYear(2013)">2013</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 2008 ? 'active' : ''" ng-click="goToYear(2008)">2008</span>
+                        <span ng-class="year == 2009 ? 'active' : ''" ng-click="goToYear(2009)">2009</span>
+                        <span ng-class="year == 2010 ? 'active' : ''" ng-click="goToYear(2010)">2010</span>
+                        <span ng-class="year == 2011 ? 'active' : ''" ng-click="goToYear(2011)">2011</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 2004 ? 'active' : ''" ng-click="goToYear(2004)">2004</span>
+                        <span ng-class="year == 2005 ? 'active' : ''" ng-click="goToYear(2005)">2005</span>
+                        <span ng-class="year == 2006 ? 'active' : ''" ng-click="goToYear(2006)">2006</span>
+                        <span ng-class="year == 2007 ? 'active' : ''" ng-click="goToYear(2007)">2007</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 2000 ? 'active' : ''" ng-click="goToYear(2000)">2000</span>
+                        <span ng-class="year == 2001 ? 'active' : ''" ng-click="goToYear(2001)">2001</span>
+                        <span ng-class="year == 2002 ? 'active' : ''" ng-click="goToYear(2002)">2002</span>
+                        <span ng-class="year == 2003 ? 'active' : ''" ng-click="goToYear(2003)">2003</span>
+                    </div>
+                </div>
+                <div class="year-list year-90">
+                    <div>
+                        <span ng-class="year == 1998 ? 'active' : ''" ng-click="goToYear(1998)">1998</span>
+                        <span ng-class="year == 1999 ? 'active' : ''" ng-click="goToYear(1999)">1999</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 1994 ? 'active' : ''" ng-click="goToYear(1994)">1994</span>
+                        <span ng-class="year == 1995 ? 'active' : ''" ng-click="goToYear(1995)">1995</span>
+                        <span ng-class="year == 1996 ? 'active' : ''" ng-click="goToYear(1996)">1996</span>
+                        <span ng-class="year == 1997 ? 'active' : ''" ng-click="goToYear(1997)">1997</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 1990 ? 'active' : ''" ng-click="goToYear(1990)">1990</span>
+                        <span ng-class="year == 1991 ? 'active' : ''" ng-click="goToYear(1991)">1991</span>
+                        <span ng-class="year == 1992 ? 'active' : ''" ng-click="goToYear(1992)">1992</span>
+                        <span ng-class="year == 1993 ? 'active' : ''" ng-click="goToYear(1993)">1993</span>
+                    </div>
+                </div>
+                <div class="year-list year-80">
+                    <div>
+                        <span ng-class="year == 1986 ? 'active' : ''" ng-click="goToYear(1986)">1986</span>
+                        <span ng-class="year == 1987 ? 'active' : ''" ng-click="goToYear(1987)">1987</span>
+                        <span ng-class="year == 1988 ? 'active' : ''" ng-click="goToYear(1988)">1988</span>
+                        <span ng-class="year == 1989 ? 'active' : ''" ng-click="goToYear(1989)">1989</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 1982 ? 'active' : ''" ng-click="goToYear(1982)">1982</span>
+                        <span ng-class="year == 1983 ? 'active' : ''" ng-click="goToYear(1983)">1983</span>
+                        <span ng-class="year == 1984 ? 'active' : ''" ng-click="goToYear(1984)">1984</span>
+                        <span ng-class="year == 1985 ? 'active' : ''" ng-click="goToYear(1985)">1985</span>
+                    </div>
+                    <div>
+                        <span ng-class="year == 1978 ? 'active' : ''" ng-click="goToYear(1978)">1978</span>
+                        <span ng-class="year == 1979 ? 'active' : ''" ng-click="goToYear(1979)">1979</span>
+                        <span ng-class="year == 1980 ? 'active' : ''" ng-click="goToYear(1980)">1980</span>
+                        <span ng-class="year == 1981 ? 'active' : ''" ng-click="goToYear(1981)">1981</span>
+                    </div>
+                </div>
+            </ul>
+            <div id="yearProgress"></div>
+        </div>
+        <div class="item incident">
+            <div class="dropdown">
+                <span id="incident-menu-button" type="button" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                   INCIDENT: {{incidentFilter}}
+                </span>
+                <ul class="dropdown-menu incident-menu" role="menu" aria-labelledby="incident-menu-button">
+                    <li ng-repeat="incident in incidentTypes" ng-class="incident == incidentFilter ? 'active' : ''"
+                        ng-click="selectIncidentType(incident)"><a>{{incident}}</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="item session-item {{seasonFilter}}">
+            <div class="dropdown">
+                <span id="season-menu-button" type="button" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                   SEASON: {{seasonFilter}} <img ng-hide="seasonFilter == 'ALL'" src="img/{{seasonFilter}}.svg">
+                </span>
+                <ul class="dropdown-menu season-menu" role="menu" aria-labelledby="season-menu-button">
+                    <li ng-repeat="season in seasonTypes" ng-class="season == seasonFilter ? 'active' : '' "
+                        ng-click="selectSeasonType(season)"><a>{{season}}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-------------- ANALYSIS UI ---------------------->
+    <div id="analysis" class="noselect" ng-class="status!='analysis' ? 'analysis_invisible' : ''" >
+        <div class="title main-title"><img ng-src="img/analysis.png" width="24"/>TERRORISM ANALYSIS</div>
+        <div class="tabs row">
+            <span class="tab col-md-6 col-sm-6" ng-class="analysisStatus == 'prediction' ? 'active' :  ''"
+                  ng-click="selectAnalysisTab('prediction')">Area Prediction</span>
+            <span class="tab col-md-6 col-sm-6" ng-class="analysisStatus == 'analysis' ? 'active' :  ''"
+                  ng-click="selectAnalysisTab('analysis')">Analysis</span>
+        </div>
+        <div ng-show="analysisStatus == 'prediction'" id="prediction-wrapper" jscroll>
+            <button class="btn btn-primary btn-attack" ng-click="onClickCreateAttack()"><img ng-src="img/Createterroristattack.png" width="24"/>CREATE AN ASSAULT EVENT
+            </button>
+            <div id="explosion">
+                <div class="line-padding">
+                    <span class="info">TYPE OF EXPLOSION USED</span> <span class="detail" tooltip="Explosive details are collected from various sources on the internet and averagely measured.">How is this measured ?</span>
+                </div>
+                <div class="attact-type row line-padding">
+                    <div class="col-md-4 col-sm-4">
+                        <button class="btn btn-primary btn-attack-type" ng-class="attactType == 'bomb' ? 'active' : ''"
+                                ng-click="selectAttackType('bomb')"><img ng-src="img/bomb{{attactType == 'bomb' ? '' : 'inactive'}}.png" width="24">Bomb
+                        </button>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <button class="btn btn-primary btn-attack-type"
+                                ng-class="attactType == 'rocket' ? 'active' : ''" ng-click="selectAttackType('rocket')">
+                            <img ng-src="img/rocket{{attactType == 'rocket' ? '' : 'inactive'}}.png" width="24">Rocket
+                        </button>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <button class="btn btn-primary btn-attack-type" ng-class="attactType == 'c4' ? 'active' : ''"
+                                ng-click="selectAttackType('c4')"><img ng-src="img/c4{{attactType == 'c4' ? '' : 'inactive'}}.png" width="24">C4
+                        </button>
+                    </div>
+                </div>
+                <div class="custom-explosion line-padding">
+                    <input id='customRadiusInput' type="text" class="form-control" ng-model="customRadius"
+                           ng-blur="radiusChange()">
+                    <span ng-show="customRadius==null" class="custom-placeholder" ng-click="focusInput()">CUSTOM EXPLOSION</span>
+                    <span ng-show="customRadius==null" class="custom-info" ng-click="focusInput()">enter radius</span>
+                    <span class="custom-button" ng-click="radiusChange()"> > </span>
+                </div>
+                <div class="line-padding poi-layers">
+                    <span class="info">SHOW NEAREST FACILITIES</span>
+                    <div class="poi-layer-list">
+                        <div class="row" ng-repeat="poi in poiLayersModel">
+                            <div class="col-md-1 col-sm-1"><img ng-src="{{poi.icon}}" width="16"> </div>
+                            <div class="col-md-5 col-sm-5 layer-name">{{poi.name}}</div>
+                            <div class="col-md-1 col-sm-1" ><span class="layer-icon" ng-click="switchPoiVisible(poi)" style="{{poi.visible ? 'background:'+poi.color : ' border: 2px solid;'}}"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line-padding prediction-info" ng-show="isShowingPredictionInfo">
+                    Please create an incident to see who may have caused this attack.
+
+                </div>
+              <div class="line-padding prediction-info" ng-show="!isShowingPredictionInfo && mapViewer.noResult">
+                    There is no incidents in this area.
+                </div>
+                <div class="line-padding prediction-info" ng-show="mapViewer.allIsUnknown">
+                    There are unknown incidents in this area. You may check Analysis tab to see details.
+                </div>
+
+
+                <div class="line-padding group-prediction" ng-hide="terroristGroup==null || terroristGroup.length == 0">
+                    <div>
+                        <span class="info">WHO MAY HAVE CAUSED THE ATTACK<span class="detail" tooltip='This is measured by Incident percentage of a terrorist group according to the total attack count of terrorist groups.'>How is this calculated?</span></span>
+                        <div>See
+                            <span ng-click="limitResult(10)" class="limit-number" ng-class="limitResultValue==10 ? 'active' : ''">10</span>
+                            <span ng-click="limitResult(20)" class="limit-number" ng-class="limitResultValue==20 ? 'active' : ''">20</span>
+                            <span ng-click="limitResult(100)" class="limit-number" ng-class="limitResultValue>20 ? 'active' : ''">ALL</span>
+                        </div>
+
+                        <div class="prediction-list">
+                            <div ng-repeat="data in terroristGroup | orderBy:'-percent' | limitTo:limitResultValue" class="row">
+                                <div class="col-md-1 col-sm-1 result-number">{{$index+1}}.</div>
+                                <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{data.percent}}" total="100"></barchart></div>
+                                <div class="col-md-2 col-sm-2 group-percent">%{{data.percent | number:2}}</div>
+                                <div class="col-md-5 col-sm-5">{{data.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div ng-show="analysisStatus == 'analysis'" class="analysis-result-tab" id="analysis-wrapper" jscroll>
+            <linechart ng-model="eventStatistic"></linechart>
+
+            <div class="analysisRadius">Events Within 3KM Radius of the City</div>
+            <div class="label padding-left-35 event-statistic" ng-init="eventsOpen = true;" ng-click="eventsOpen = !eventsOpen">
+                Event Statistics by year
+            </div>
+
+
+            <div class="label padding-left-35 people-status" ng-init="peopleStatusOpen = true;" ng-click="peopleStatusOpen = !peopleStatusOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!peopleStatusOpen ? 'closed' : ''"/>
+                People Status
+            </div>
+            <div class="value-list" ng-class="peopleStatusOpen ? 'visible': ''">
+                <div class="row" ng-show="peopleStatusOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{killCount}}" total="{{killCount+injuredCount}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{killCount | number:0}}</div>
+                    <div class="col-md-7 col-sm-7">Dead</div>
+
+                </div>
+                <div class="row" ng-show="peopleStatusOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{injuredCount}}" total="{{killCount+injuredCount}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{injuredCount | number:0}}</div>
+                    <div class="col-md-7 col-sm-7">Injured</div>
+                </div>
+            </div>
+
+            <div class="label padding-left-35" ng-init="eventTypeOpen = true;" ng-click="eventTypeOpen = !eventTypeOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!eventTypeOpen ? 'closed' : ''"/>
+                Event Types
+            </div>
+            <div class="value-list"  ng-class="eventTypeOpen ? 'visible': ''">
+                <div ng-repeat="event in eventTypes | orderBy:'-value'" class="row"  ng-show="eventTypeOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{event.value}}" total="{{eventTypesTotal}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{event.value}}</div>
+                    <div class="col-md-7 col-sm-7"><span class="event-key-circle" event="{{event.key}}"></span>{{event.key}}</div>
+                </div>
+            </div>
+
+            <div class="label padding-left-35"  ng-init="targetTypeOpen = true;" ng-click="targetTypeOpen = !targetTypeOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!targetTypeOpen ? 'closed' : ''"/>
+                Target Types
+            </div>
+            <div class="value-list" ng-class="targetTypeOpen ? 'visible': ''">
+                <div ng-repeat="target in targetTypes | orderBy:'-value'" class="row" ng-show="targetTypeOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{target.value}}" total="{{targetTypesTotal}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{target.value}}</div>
+                    <div class="col-md-7 col-sm-7">{{target.key}}</div>
+                </div>
+            </div>
+
+            <div class="label padding-left-35"   ng-init="attackGroupOpen = true;" ng-click="attackGroupOpen = !attackGroupOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!attackGroupOpen ? 'closed' : ''"/>
+                Attacking Group
+            </div>
+            <div class="value-list"  ng-class="attackGroupOpen ? 'visible': ''">
+                <div ng-repeat="groupName in terroristGroupNameList | orderBy:'-count'" class="row" ng-show="attackGroupOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{groupName.count}}" total="{{terroristGroupTotal}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{groupName.count}}</div>
+                    <div class="col-md-7 col-sm-7">{{groupName.name}}</div>
+                </div>
+            </div>
+
+            <div class="label padding-left-35"   ng-init="weaponTypeOpen = true;" ng-click="weaponTypeOpen = !weaponTypeOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!weaponTypeOpen ? 'closed' : ''"/>
+                Weapon Type
+            </div>
+            <div class="value-list"  ng-class="weaponTypeOpen ? 'visible': ''">
+                <div ng-repeat="weapon in weaponTypes | orderBy:'-value'" class="row"  ng-show="weaponTypeOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{weapon.value}}" total="{{weaponTypesTotal}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{weapon.value}}</div>
+                    <div class="col-md-7 col-sm-7">{{weapon.key}}</div>
+                </div>
+            </div>
+
+            <div class="label padding-left-35"  ng-init="weaponSubTypeOpen = true;" ng-click="weaponSubTypeOpen = !weaponSubTypeOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!weaponSubTypeOpen ? 'closed' : ''"/>
+                Weapon SubType
+            </div>
+            <div class="value-list" ng-class="weaponSubTypeOpen ? 'visible': ''">
+                <div ng-repeat="weapon in weaponSubType | orderBy:'-value'" class="row" ng-show="weaponSubTypeOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{weapon.value}}" total="{{weaponSubTypesTotal}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count">{{weapon.value}}</div>
+                    <div class="col-md-7 col-sm-7">{{weapon.key}}</div>
+                </div>
+            </div>
+
+            <div class="label padding-left-35" ng-init="damageStatusOpen = true;" ng-click="damageStatusOpen = !damageStatusOpen">
+                <img ng-src="img/down.png" width="10" class="open-tree-icon" ng-class="!damageStatusOpen ? 'closed' : ''"/>
+                Damage Status
+            </div>
+            <div class="value-list"  ng-class="damageStatusOpen ? 'visible': ''">
+                <div ng-hide="damage.key==' '" ng-repeat="damage in damageStatus | orderBy:'-value'" class="row"  ng-show="damageStatusOpen">
+                    <div class="col-md-3 col-sm-3 barchart-info"><barchart value="{{damage.value}}" total="{{damageStatusTotal}}"></barchart></div>
+                    <div class="col-md-2 col-sm-1 statistic-count"> {{damage.value}}</div>
+                    <div class="col-md-7 col-sm-7">{{damage.key}}</div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <!--<span id="new-attack" ng-show="mapViewer.isCreateNewAttack"><img src="img/explosion.png"></span>-->
+    <div id="hidden_div" style="display: none;"></div>
+
+</div>
